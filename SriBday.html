@@ -1,1 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Srii! 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff0f3;
+            --primary-pink: #ffb3c6;
+            --dark-pink: #ff8fab;
+            --text-color: #590d22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            scroll-behavior: smooth;
+        }
+
+        .blend-img {
+            mix-blend-mode: multiply;
+            border-radius: 20px;
+        }
+
+        /* --- BACKGROUND DECORATIONS --- */
+        .bg-decor {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.6;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .plane { top: 10%; left: -150px; width: 150px; animation: flyAcross 15s linear infinite; }
+        .butterfly { top: 20%; right: 5%; width: 100px; animation: float 4s ease-in-out infinite reverse; }
+        .cd { bottom: 10%; left: 10%; width: 80px; animation: spin 8s linear infinite; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero img {
+            width: 200px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--dark-pink);
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        .age-container {
+            display: inline-block;
+            height: 1.2em;
+            overflow: hidden;
+            vertical-align: bottom;
+            position: relative;
+            color: var(--text-color);
+            padding: 0 5px;
+        }
+
+        .age-numbers {
+            display: flex;
+            flex-direction: column;
+            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .roll-up { transform: translateY(-50%); }
+
+        /* --- QUESTION SECTION --- */
+        .question-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, #fff0f3, #ffe5ec);
+            width: 100%;
+        }
+
+        .question-section h2 { font-size: 2.2rem; margin-bottom: 30px; z-index: 10; }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            position: relative;
+            z-index: 20;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 15px rgba(255, 143, 171, 0.3);
+        }
+
+        #yesBtn { background-color: var(--dark-pink); color: white; }
+        #yesBtn:hover { transform: scale(1.1); box-shadow: 0 12px 20px rgba(255, 143, 171, 0.5); }
+        #noBtn { background-color: white; color: var(--dark-pink); position: relative; }
+
+        .pleading-cat {
+            width: 150px;
+            margin-top: 20px;
+            display: none;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* --- MINI GAME SECTION --- */
+        .game-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-board {
+            width: 90%;
+            max-width: 600px;
+            height: 400px;
+            background: white;
+            border-radius: 30px;
+            border: 4px dashed var(--primary-pink);
+            position: relative;
+            margin-top: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            cursor: crosshair;
+        }
+
+        .game-target {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.2s;
+            mix-blend-mode: multiply;
+        }
+        
+        .game-target:active { transform: scale(0.8); }
+
+        #scoreBoard { font-size: 1.5rem; font-weight: 800; color: var(--dark-pink); margin-top: 10px; }
+
+        .game-win {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            animation: fadeIn 1s;
+            padding: 20px;
+        }
+
+        .game-win img { width: 160px; margin-bottom: 20px; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes flyAcross { 0% { left: -150px; transform: translateY(0) rotate(5deg); } 50% { transform: translateY(-50px) rotate(0deg); } 100% { left: 110vw; transform: translateY(20px) rotate(-5deg); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Background Decor using the web links -->
+    <img src="https://i.postimg.cc/RZ9rvdD6/6b40f6ad7b553cb5538c96ca831b599c.jpg" class="bg-decor plane" alt="Paper plane">
+    <img src="https://i.postimg.cc/vZ9mN06T/480ed92e867532416f1e61e45d537952.jpg" class="bg-decor butterfly" alt="Butterfly">
+    <img src="https://i.postimg.cc/x1Hd46bC/0394d9f373b3a1c18b4fe8e02e97daad.jpg" class="bg-decor cd" alt="CD">
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <img src="https://i.postimg.cc/7Z7LWKTb/da77d9abc83c947fbe9b7340864ec0e3.jpg" class="blend-img" alt="Cat with Bouquet">
+        <h1>Happy Birthday Srii! ✨</h1>
+        <h2 style="font-size: 2rem; margin-top: 10px;">
+            Turning 
+            <span class="age-container">
+                <span class="age-numbers" id="ageAnimator">
+                    <span>16</span>
+                    <span>17</span>
+                </span>
+            </span>!
+        </h2>
+        <p style="margin-top: 20px; opacity: 0.7;">Scroll down for a surprise 👇</p>
+    </div>
+
+    <!-- Question Section -->
+    <div class="question-section" id="qSection">
+        <img src="https://i.postimg.cc/j5DmMFLk/7ae74698ac0f2bd98077afd28121c1f9.jpg" class="blend-img" width="100" style="margin-bottom: 20px;" alt="Heart Bubble">
+        <h2>Will you send me a special B'day pic? 🥺</h2>
+        
+        <div class="btn-container">
+            <button id="yesBtn" onclick="sayYes()">YES OF COURSE! 💖</button>
+            <button id="noBtn">No</button>
+        </div>
+        
+        <!-- Pleading cat pops up when they click No -->
+        <img src="https://i.postimg.cc/0ymNBVJb/856b43743c99031f1dad47b6b0bf684d.jpg" id="pleadingCat" class="blend-img pleading-cat" alt="Pleading Cutie">
+    </div>
+
+    <!-- Mini Game Section -->
+    <div class="game-section">
+        <h2>Catch the Cute Stuff! 🐾</h2>
+        <p style="text-align: center;">Click 10 items to unlock your final birthday gift!</p>
+        <div id="scoreBoard">Score: 0 / 10</div>
+        
+        <div class="game-board" id="gameBoard">
+            <div class="game-win" id="gameWin">
+                <!-- Tulip Cat Winning image -->
+                <img src="https://i.postimg.cc/K8LYH0gK/221693915545497b49634065bc732e4d.jpg" class="blend-img" alt="Winning Cat">
+                <h2>YAY! You won! 🎉</h2>
+                <p>Happy 17th Birthday cutie! Have the best buttery-smooth day ever! 🎂💖</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth Age Animator
+        setTimeout(() => { document.getElementById('ageAnimator').classList.add('roll-up'); }, 1500);
+
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const pleadingCat = document.getElementById('pleadingCat');
+        
+        const noTexts = ["Wait, really? 😢", "Are you sure? 💔", "Pretty please? 🥺", "Don't do this to me!", "I'm gonna cry... 😭", "Say yes cutie!!", "Fine, clicking this doesn't work anymore!"];
+        
+        let noClickCount = 0;
+        let yesScale = 1;
+
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(noClickCount === 0) pleadingCat.style.display = 'block';
+            noBtn.innerText = noTexts[noClickCount % noTexts.length];
+            noClickCount++;
+            yesScale += 0.2;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            const randomX = (Math.random() - 0.5) * 80;
+            const randomY = (Math.random() - 0.5) * 80;
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+
+        function sayYes() {
+            yesBtn.innerText = "YAY! Can't wait! 🥰";
+            noBtn.style.display = "none";
+            yesBtn.style.transform = "scale(1.2)";
+            
+            // This changes the pleading cat to the happy purple cat when they say yes!
+            pleadingCat.src = "https://i.postimg.cc/WbGKYr14/0f6baa683e739bf671e963caa6280862.jpg"; 
+            
+            document.getElementById('qSection').style.background = "#d4edda";
+            setTimeout(() => { window.scrollBy({ top: window.innerHeight, behavior: 'smooth' }); }, 1200);
+        }
+
+        // Mini Game Logic
+        const gameBoard = document.getElementById('gameBoard');
+        const scoreBoard = document.getElementById('scoreBoard');
+        const gameWin = document.getElementById('gameWin');
+        
+        let score = 0;
+        let gameActive = true;
+        let spawnInterval;
+
+        // All the adorable game items you provided!
+        const gameItems = [
+            "https://i.postimg.cc/YCgSsdmM/d8d65022741de05193ad57f85d74b968.jpg",
+            "https://i.postimg.cc/Z53qMwyB/185836af8e6f1f041ec35263acd06b70.jpg",
+            "https://i.postimg.cc/wjJBGwsq/3935a001eaf60fef30b54379cc5dfeb1.jpg",
+            "https://i.postimg.cc/Jhn2h23v/a5fd081a8edaa36e45e7794350df7ab5.jpg",
+            "https://i.postimg.cc/Hk5Lh67g/2804912c086383bf38560cfab9eb33b8.jpg",
+            "https://i.postimg.cc/kg85pTt7/aa7fcd6337d3e11cc8df43fa568168ad.jpg"
+        ];
+
+        function spawnItem() {
+            if (!gameActive) return;
+            const item = document.createElement('img');
+            item.src = gameItems[Math.floor(Math.random() * gameItems.length)];
+            item.className = 'game-target blend-img';
+            const maxX = gameBoard.clientWidth - 80;
+            const maxY = gameBoard.clientHeight - 80;
+            item.style.left = Math.floor(Math.random() * maxX) + 'px';
+            item.style.top = Math.floor(Math.random() * maxY) + 'px';
+            gameBoard.appendChild(item);
+
+            item.addEventListener('mousedown', () => {
+                if(!gameActive) return;
+                score++;
+                scoreBoard.innerText = `Score: ${score} / 10`;
+                item.remove();
+                if (score >= 10) {
+                    gameActive = false;
+                    clearInterval(spawnInterval);
+                    document.querySelectorAll('.game-target').forEach(el => el.remove());
+                    gameWin.style.display = 'flex';
+                    gameBoard.style.border = 'none';
+                    gameBoard.style.background = 'transparent';
+                    gameBoard.style.boxShadow = 'none';
+                }
+            });
+
+            setTimeout(() => {
+                if (gameBoard.contains(item)) {
+                    item.style.opacity = '0';
+                    setTimeout(() => { if (gameBoard.contains(item)) item.remove(); }, 300);
+                }
+            }, 1500);
+        }
+
+        // Starts game when scrolled into view
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && gameActive && score < 1) {
+                spawnInterval = setInterval(spawnItem, 800);
+            }
+        });
+        observer.observe(document.querySelector('.game-section'));
+    </script>
+</body>
+  </html>
 
